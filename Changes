@@ -6,3 +6,6 @@
 
 0.03
     Add support for X-Forwarded-For
+
+0.04
+    Add support for trusted source IPs or CIDRs when receiving a forwarded IP header

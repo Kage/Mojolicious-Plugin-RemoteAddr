@@ -1,15 +1,26 @@
 package Mojolicious::Plugin::RemoteAddr;
 use Mojo::Base 'Mojolicious::Plugin';
+use Net::CIDR::Lite;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub register {
     my ($self, $app, $conf) = @_;
 
     $conf->{order} ||= ['x-real-ip', 'x-forwarded-for', 'tx'];
 
+    $conf->{trust} ||= ['0.0.0.0/0', '::/0'];
+
     $app->helper( remote_addr => sub {
         my $c = shift;
+
+        my $cidr = Net::CIDR::Lite->new;
+        foreach my $trust ( @{ $conf->{trust} } ) {
+            $cidr->add_any($trust);
+        }
+        my $src_addr = $c->tx->remote_address;
+        return $src_addr unless
+            defined $src_addr && $cidr->find($src_addr);
 
         foreach my $place ( @{ $conf->{order} } ) {
             if ( $place eq 'x-real-ip' ) {
@@ -47,6 +58,9 @@ Mojolicious::Plugin::RemoteAddr - an easy way of getting remote ip address
 L<Mojolicious::Plugin::RemoteAddr> adds simple helper "remote_addr" which returns an ip address of a remote host, It tries getting remote ip in different ways.
 Firstly, it takes 'X-Real-IP' header. Secondly, it takes 'X-Forwarded-For' header. If they are empty it takes the ip from current request transaction.
 
+You can also specify a list of trusted source IP addresses, ranges, or CIDRs that are allowed to set the header. This supports all definition types from
+L<Net::CIDR::Lite>.
+
 =head1 CONFIG
 
 =head2 order
@@ -73,6 +87,14 @@ current request transaction
 
 =back
 
+=head2 trust
+
+Source IPs or CIDRs to trust as a source of the reverse proxt header. Default is ['0.0.0.0/0', '::/0']
+
+If you do have reverse proxy then you should set this to the source IP of your reverse proxy to avoid ip-address spoofing.
+
+Supports all IP, CIDR, and range definition types from L<Net::CIDR::Lite>.
+
 =head1 HELPERS
 
 =head2 remote_addr
@@ -89,6 +111,6 @@ Please report any bugs or feature requests to Github L<https://github.com/koorch
 
 =head1 SEE ALSO
 
-L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>.
+L<Net::CIDR::Lite>, L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>.
 
 =cut
