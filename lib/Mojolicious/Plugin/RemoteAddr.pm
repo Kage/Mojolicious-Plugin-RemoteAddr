@@ -105,12 +105,17 @@ Returns remote IP address
 
 Viktor Turskyi <koorchik@cpan.org>
 
+=head1 CONTRIBUTORS
+
+* dsteinbrunner@github
+* Kage@github
+
 =head1 BUGS
 
 Please report any bugs or feature requests to Github L<https://github.com/koorchik/Mojolicious-Plugin-RemoteAddr>
 
 =head1 SEE ALSO
 
-L<Net::CIDR::Lite>, L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>.
+L<Mojolicious>, L<Mojolicious::Guides>, L<Net::CIDR::Lite>, L<http://mojolicio.us>.
 
 =cut
