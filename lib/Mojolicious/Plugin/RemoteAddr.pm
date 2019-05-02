@@ -107,8 +107,8 @@ Viktor Turskyi <koorchik@cpan.org>
 
 =head1 CONTRIBUTORS
 
-* dsteinbrunner@github
-* Kage@github
+- dsteinbrunner@github
+- Kage@github
 
 =head1 BUGS
 
