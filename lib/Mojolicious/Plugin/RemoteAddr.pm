@@ -9,7 +9,7 @@ sub register {
 
     $conf->{order} ||= ['x-real-ip', 'x-forwarded-for', 'tx'];
 
-    $conf->{trust} ||= ['0.0.0.0/0', '::/0'];
+    $conf->{trust} ||= ['0.0.0.0/0'];
 
     $app->helper( remote_addr => sub {
         my $c = shift;
@@ -89,7 +89,7 @@ current request transaction
 
 =head2 trust
 
-Source IPs or CIDRs to trust as a source of the reverse proxt header. Default is ['0.0.0.0/0', '::/0']
+Source IPs or CIDRs to trust as a source of the reverse proxt header. Default is ['0.0.0.0/0']
 
 If you do have reverse proxy then you should set this to the source IP of your reverse proxy to avoid ip-address spoofing.
 
